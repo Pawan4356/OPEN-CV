@@ -2,13 +2,13 @@ import cv2
 
 # Reading an Image
 
-img = cv2.imread('media/image.png')
+img = cv2.imread('../media/image.png')
 cv2.imshow('Output', img)
 cv2.waitKey(0) # ~ ms
 
 # Reading a Video
 
-cap = cv2.VideoCapture('media/video.mp4')
+cap = cv2.VideoCapture('../media/video.mp4')
 
 while True:
 

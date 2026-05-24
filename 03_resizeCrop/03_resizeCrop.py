@@ -1,6 +1,6 @@
 import cv2
 
-img = cv2.imread('media/image.png')
+img = cv2.imread('../media/image.png')
 print(img.shape)
 cv2.imshow('Image', img)
 
