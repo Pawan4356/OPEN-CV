@@ -1,0 +1,1928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CV & Robotics — Interview Deep Dive</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --bg2: #13161e;
+    --bg3: #1a1e28;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.13);
+    --text: #e8eaf0;
+    --text2: #8b90a0;
+    --text3: #555a6a;
+    --accent-cv: #5b8dee;
+    --accent-ros: #3ecf8e;
+    --accent-math: #f5a623;
+    --accent-cv-dim: rgba(91,141,238,0.12);
+    --accent-ros-dim: rgba(62,207,142,0.12);
+    --accent-math-dim: rgba(245,166,35,0.12);
+    --code-bg: #0a0c11;
+    --highlight: #2a3f6f;
+    --red: #e05c5c;
+    --purple: #a78bfa;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-size: 16px;
+    line-height: 1.75;
+    min-height: 100vh;
+  }
+
+  /* ── SIDEBAR NAV ── */
+  #nav {
+    position: fixed;
+    top: 0; left: 0;
+    width: 260px;
+    height: 100vh;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    z-index: 100;
+    padding: 1.5rem 0 2rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border2) transparent;
+  }
+
+  #nav-logo {
+    padding: 0 1.25rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1rem;
+  }
+  #nav-logo h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.15rem;
+    color: var(--text);
+    font-weight: 400;
+    line-height: 1.3;
+  }
+  #nav-logo p {
+    font-size: 0.72rem;
+    color: var(--text3);
+    margin-top: 4px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .nav-section {
+    padding: 0.4rem 1.25rem 0.2rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-top: 0.8rem;
+  }
+
+  #nav a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.42rem 1.25rem;
+    font-size: 0.8rem;
+    color: var(--text2);
+    text-decoration: none;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+    line-height: 1.4;
+  }
+  #nav a:hover { color: var(--text); background: var(--bg3); }
+  #nav a.active { color: var(--text); border-left-color: var(--accent-cv); background: var(--accent-cv-dim); }
+  #nav a.ros-link.active { border-left-color: var(--accent-ros); background: var(--accent-ros-dim); }
+  #nav a.math-link.active { border-left-color: var(--accent-math); background: var(--accent-math-dim); }
+
+  .nav-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .dot-cv { background: var(--accent-cv); }
+  .dot-ros { background: var(--accent-ros); }
+  .dot-math { background: var(--accent-math); }
+
+  /* ── MAIN CONTENT ── */
+  #main {
+    margin-left: 260px;
+    padding: 3rem 3.5rem 6rem;
+    max-width: 960px;
+  }
+
+  /* ── HERO ── */
+  #hero {
+    padding: 3rem 0 3.5rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 3rem;
+  }
+  #hero .eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent-cv);
+    margin-bottom: 0.75rem;
+  }
+  #hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 3rem;
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+  #hero h1 em { color: var(--accent-cv); font-style: italic; }
+  #hero p {
+    font-size: 1rem;
+    color: var(--text2);
+    max-width: 580px;
+    line-height: 1.7;
+  }
+
+  .badge-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+  }
+  .badge {
+    font-size: 0.72rem;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+  }
+  .badge-cv { background: var(--accent-cv-dim); color: var(--accent-cv); border: 1px solid rgba(91,141,238,0.25); }
+  .badge-ros { background: var(--accent-ros-dim); color: var(--accent-ros); border: 1px solid rgba(62,207,142,0.25); }
+  .badge-math { background: var(--accent-math-dim); color: var(--accent-math); border: 1px solid rgba(245,166,35,0.25); }
+  .badge-done { background: rgba(255,255,255,0.05); color: var(--text2); border: 1px solid var(--border2); }
+
+  /* ── DOMAIN HEADER ── */
+  .domain-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 3.5rem 0 1.75rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .domain-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .domain-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 5px 14px;
+    border-radius: 20px;
+  }
+  .dl-cv { color: var(--accent-cv); background: var(--accent-cv-dim); border: 1px solid rgba(91,141,238,0.2); }
+  .dl-ros { color: var(--accent-ros); background: var(--accent-ros-dim); border: 1px solid rgba(62,207,142,0.2); }
+  .dl-math { color: var(--accent-math); background: var(--accent-math-dim); border: 1px solid rgba(245,166,35,0.2); }
+
+  /* ── TOPIC CARD ── */
+  .topic {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 1.75rem;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .topic:hover { border-color: var(--border2); }
+
+  .topic-header {
+    padding: 1.25rem 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    justify-content: space-between;
+    user-select: none;
+  }
+  .topic-header:hover { background: var(--bg3); }
+
+  .topic-title-row { flex: 1; }
+  .topic-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text3);
+    margin-bottom: 4px;
+  }
+  .topic-title {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.35;
+  }
+  .topic-subtitle {
+    font-size: 0.8rem;
+    color: var(--text2);
+    margin-top: 4px;
+  }
+
+  .chevron {
+    color: var(--text3);
+    font-size: 1.2rem;
+    transition: transform 0.3s;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .topic.open .chevron { transform: rotate(180deg); }
+
+  .topic-body {
+    display: none;
+    border-top: 1px solid var(--border);
+  }
+  .topic.open .topic-body { display: block; }
+
+  .topic-body-inner { padding: 1.5rem; }
+
+  /* ── SECTIONS INSIDE TOPIC ── */
+  .section {
+    margin-bottom: 2rem;
+  }
+  .section:last-child { margin-bottom: 0; }
+
+  .section-label {
+    font-size: 0.67rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 0.6rem;
+    font-weight: 500;
+  }
+
+  .section p {
+    font-size: 0.9rem;
+    color: var(--text2);
+    line-height: 1.8;
+    margin-bottom: 0.6rem;
+  }
+  .section p:last-child { margin-bottom: 0; }
+  .section p strong { color: var(--text); font-weight: 500; }
+
+  /* ── CODE BLOCKS ── */
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.1rem 1.25rem;
+    overflow-x: auto;
+    margin: 0.75rem 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    line-height: 1.7;
+    color: #c9d1d9;
+  }
+  .kw { color: #ff7b72; }
+  .fn { color: #79c0ff; }
+  .cm { color: #555a6a; font-style: italic; }
+  .st { color: #a5d6ff; }
+  .nm { color: #f2cc60; }
+  .op { color: var(--text2); }
+
+  /* ── CALLOUT BOXES ── */
+  .callout {
+    border-radius: 8px;
+    padding: 1rem 1.1rem;
+    margin: 0.75rem 0;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    border-left: 3px solid;
+  }
+  .callout strong { display: block; font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; font-weight: 600; }
+
+  .callout-why { background: rgba(91,141,238,0.08); border-color: var(--accent-cv); color: #a8c0f0; }
+  .callout-why strong { color: var(--accent-cv); }
+  .callout-trap { background: rgba(224,92,92,0.08); border-color: var(--red); color: #f0a8a8; }
+  .callout-trap strong { color: var(--red); }
+  .callout-tip { background: rgba(62,207,142,0.08); border-color: var(--accent-ros); color: #a8f0ce; }
+  .callout-tip strong { color: var(--accent-ros); }
+  .callout-math { background: rgba(245,166,35,0.08); border-color: var(--accent-math); color: #f0d4a8; }
+  .callout-math strong { color: var(--accent-math); }
+
+  /* ── Q&A FORMAT ── */
+  .qa { margin-bottom: 1.25rem; }
+  .question {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+    display: flex;
+    gap: 8px;
+  }
+  .question::before { content: "Q"; color: var(--accent-cv); font-family: 'DM Mono', monospace; font-size: 0.75rem; font-weight: 500; flex-shrink: 0; margin-top: 1px; }
+  .answer {
+    font-size: 0.87rem;
+    color: var(--text2);
+    line-height: 1.8;
+    padding-left: 1.1rem;
+    border-left: 1px solid var(--border2);
+    margin-left: 0.3rem;
+  }
+
+  /* ── VISUAL DIAGRAM (ASCII/text) ── */
+  .diagram {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    line-height: 1.65;
+    color: var(--text2);
+    overflow-x: auto;
+    margin: 0.75rem 0;
+  }
+  .diagram .hl { color: var(--accent-cv); }
+  .diagram .hl2 { color: var(--accent-ros); }
+  .diagram .hl3 { color: var(--accent-math); }
+
+  /* ── STEP LIST ── */
+  .steps { counter-reset: step; }
+  .step {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    counter-increment: step;
+  }
+  .step::before {
+    content: counter(step);
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    color: var(--accent-cv);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 500;
+    min-width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .step-content { font-size: 0.87rem; color: var(--text2); line-height: 1.75; }
+  .step-content strong { color: var(--text); }
+
+  /* ── TABLE ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+    margin: 0.75rem 0;
+  }
+  th {
+    background: var(--bg3);
+    color: var(--text2);
+    text-align: left;
+    padding: 0.6rem 0.85rem;
+    border-bottom: 1px solid var(--border2);
+    font-weight: 500;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+  }
+  td {
+    padding: 0.55rem 0.85rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text2);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--bg3); }
+  td strong { color: var(--text); }
+
+  /* ── FORMULA ── */
+  .formula {
+    text-align: center;
+    padding: 1rem;
+    background: var(--code-bg);
+    border-radius: 8px;
+    margin: 0.75rem 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    color: var(--accent-math);
+    letter-spacing: 0.03em;
+  }
+
+  /* ── PROGRESS BAR ── */
+  #progress-bar {
+    position: fixed;
+    top: 0; left: 260px; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-cv), var(--accent-ros));
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform 0.1s;
+    z-index: 200;
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 800px) {
+    #nav { display: none; }
+    #main { margin-left: 0; padding: 2rem 1.25rem 4rem; }
+    #progress-bar { left: 0; }
+    #hero h1 { font-size: 2rem; }
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+  /* ── SEARCH ── */
+  #search-wrap {
+    padding: 0 1.25rem 0.75rem;
+    margin-top: 0.25rem;
+  }
+  #search {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.78rem;
+    padding: 0.4rem 0.75rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  #search:focus { border-color: var(--accent-cv); }
+  #search::placeholder { color: var(--text3); }
+
+  /* ── EXPAND ALL ── */
+  #expand-all {
+    padding: 0 1.25rem 0.5rem;
+  }
+  #expand-all button {
+    font-size: 0.72rem;
+    color: var(--text3);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    padding: 0;
+    transition: color 0.15s;
+  }
+  #expand-all button:hover { color: var(--text2); }
+
+  .tag-coded { background: rgba(62,207,142,0.1); color: var(--accent-ros); border: 1px solid rgba(62,207,142,0.2); font-size: 0.65rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; vertical-align: middle; font-weight: 500; letter-spacing: 0.05em; }
+  .tag-study { background: rgba(91,141,238,0.1); color: var(--accent-cv); border: 1px solid rgba(91,141,238,0.2); font-size: 0.65rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; vertical-align: middle; font-weight: 500; letter-spacing: 0.05em; }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- SIDEBAR -->
+<nav id="nav">
+  <div id="nav-logo">
+    <h1>CV & Robotics<br>Interview Prep</h1>
+    <p>Deep dive · All topics</p>
+  </div>
+  <div id="search-wrap">
+    <input id="search" type="text" placeholder="Search topics...">
+  </div>
+  <div id="expand-all">
+    <button onclick="toggleAll()">expand all ↕</button>
+  </div>
+
+  <div class="nav-section">Computer Vision</div>
+  <a href="#haar" class="cv-link"><span class="nav-dot dot-cv"></span>Haar Cascade</a>
+  <a href="#canny" class="cv-link"><span class="nav-dot dot-cv"></span>Canny Edge Detection</a>
+  <a href="#contour" class="cv-link"><span class="nav-dot dot-cv"></span>Contour & Shape Detection</a>
+  <a href="#homography" class="cv-link"><span class="nav-dot dot-cv"></span>Perspective & Homography</a>
+  <a href="#hsv" class="cv-link"><span class="nav-dot dot-cv"></span>HSV Color Segmentation</a>
+  <a href="#morphology" class="cv-link"><span class="nav-dot dot-cv"></span>Morphological Operations</a>
+  <a href="#dnn" class="cv-link"><span class="nav-dot dot-cv"></span>DNN / YOLO Detection</a>
+  <a href="#optflow" class="cv-link"><span class="nav-dot dot-cv"></span>Optical Flow</a>
+  <a href="#calibration" class="cv-link"><span class="nav-dot dot-cv"></span>Camera Calibration</a>
+
+  <div class="nav-section">ROS2 & Robotics</div>
+  <a href="#aruco" class="ros-link"><span class="nav-dot dot-ros"></span>ArUco Marker Localization</a>
+  <a href="#apf" class="ros-link"><span class="nav-dot dot-ros"></span>Artificial Potential Fields</a>
+  <a href="#tf2" class="ros-link"><span class="nav-dot dot-ros"></span>TF2 Coordinate Frames</a>
+  <a href="#hough" class="ros-link"><span class="nav-dot dot-ros"></span>Hough Transform</a>
+  <a href="#lidar" class="ros-link"><span class="nav-dot dot-ros"></span>LiDAR & Occupancy Maps</a>
+  <a href="#quaternion" class="ros-link"><span class="nav-dot dot-ros"></span>Quaternion Math</a>
+  <a href="#qos" class="ros-link"><span class="nav-dot dot-ros"></span>ROS2 QoS</a>
+  <a href="#kalman" class="ros-link"><span class="nav-dot dot-ros"></span>Kalman Filter</a>
+
+  <div class="nav-section">Math Foundations</div>
+  <a href="#convolution" class="math-link"><span class="nav-dot dot-math"></span>Convolution & Kernels</a>
+  <a href="#homogeneous" class="math-link"><span class="nav-dot dot-math"></span>Homogeneous Coordinates</a>
+  <a href="#tensors" class="math-link"><span class="nav-dot dot-math"></span>Images as Tensors</a>
+</nav>
+
+<!-- MAIN -->
+<main id="main">
+
+  <!-- HERO -->
+  <section id="hero">
+    <p class="eyebrow">Interview Preparation · Deep Reference</p>
+    <h1>Computer Vision<br>& <em>Robotics</em> Internals</h1>
+    <p>Every topic from your OpenCV and eyantra ROS2 projects — explained from first principles with practical examples, code, and the "why" behind every algorithm. No external resources needed.</p>
+    <div class="badge-row">
+      <span class="badge badge-cv">9 CV Topics</span>
+      <span class="badge badge-ros">8 ROS2 Topics</span>
+      <span class="badge badge-math">3 Math Foundations</span>
+      <span class="badge badge-done">✓ Coded + To Study</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       COMPUTER VISION
+  ══════════════════════════════════════════ -->
+  <div class="domain-header">
+    <div class="domain-line"></div>
+    <span class="domain-label dl-cv">Computer Vision</span>
+    <div class="domain-line"></div>
+  </div>
+
+  <!-- 1. HAAR CASCADE -->
+  <div class="topic" id="haar">
+    <div class="topic-header" onclick="toggle(this)">
+      <div class="topic-title-row">
+        <div class="topic-num">CV · 01</div>
+        <div class="topic-title">Haar Cascade Detection <span class="tag-coded">✓ coded</span></div>
+        <div class="topic-subtitle">Integral images, AdaBoost, sliding window — how haarcascade_frontalface works</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="topic-body">
+      <div class="topic-body-inner">
+
+        <div class="section">
+          <div class="section-label">What it is</div>
+          <p>A Haar cascade is a machine-learned object detector trained on thousands of positive (face) and negative (non-face) images. It is <strong>not a neural network</strong> — it uses simple rectangular features (Haar-like features) evaluated on an image's integral representation, chained together with AdaBoost into a cascade of filters.</p>
+        </div>
+
+        <div class="section">
+          <div class="section-label">Step 1 — Integral Image (the speed trick)</div>
+          <p>Before any detection happens, the image is converted into an <strong>integral image</strong> (also called a summed area table). Each pixel stores the sum of all pixels above and to the left of it.</p>
+          <div class="diagram">
+Original pixel values:       Integral image:
+┌───┬───┬───┐               ┌────┬────┬────┐
+│ 1 │ 2 │ 3 │               │  1 │  3 │  6 │
+├───┼───┼───┤   ────────▶   ├────┼────┼────┤
+│ 4 │ 5 │ 6 │               │  5 │ 12 │ 21 │
+├───┼───┼───┤               ├────┼────┼────┤
+│ 7 │ 8 │ 9 │               │ 12 │ 27 │ 45 │
+└───┴───┴───┘               └────┴────┴────┘
+
+<span class="hl">Key insight: sum of ANY rectangle = just 4 lookups in the integral image, O(1) time!</span>
+Sum of shaded region = II[D] - II[B] - II[C] + II[A]</div>
+          <p>This means evaluating a 24×24 Haar feature on a 1-pixel window and on a 200×200 window takes exactly the <strong>same time</strong>. This is what makes the cascade fast.</p>
+        </div>
+
+        <div class="section">
+          <div class="section-label">Step 2 — Haar-like Features</div>
+          <p>These are simple rectangular patterns. The feature value = (sum of white rectangle pixels) − (sum of black rectangle pixels).</p>
+          <div class="diagram">
+<span class="hl">Edge feature</span>          <span class="hl2">Line feature</span>         <span class="hl3">Diagonal feature</span>
+┌─────┬─────┐          ┌──┬──┬──┐           ┌──┬──┐
+│░░░░ │     │          │░░│  │░░│           │░░│  │
+│░░░░ │     │          │░░│  │░░│           ├──┼──┤
+└─────┴─────┘          └──┴──┴──┘           │  │░░│
+                                             └──┴──┘
+Value = Σ(white) - Σ(black)
+
+For a 24x24 window: over 160,000 possible features at different positions, sizes.
+The classifier only picks ~6,000 useful ones during training.</div>
+          <div class="callout callout-why">
+            <strong>Why does this detect faces?</strong>
+            Faces have consistent patterns: eye region is darker than forehead (edge feature), nose bridge is lighter than cheek sides (line feature). These Haar patterns capture these relationships across ALL face sizes because the integral image makes multi-scale evaluation free.
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-label">Step 3 — AdaBoost Training</div>
+          <p>Out of 160,000+ possible features, we need to pick only the <strong>most useful ~6,000</strong>. AdaBoost does this:</p>
+          <div class="steps">
+            <div class="step"><div class="step-content"><strong>Round 1:</strong> Try all 160,000 features. Pick the single feature that best separates faces from non-faces. Call this a "weak classifier" (slightly better than random).</div></div>
+            <div class="step"><div class="step-content"><strong>Round 2:</strong> Increase the weight of images that were misclassified in round 1. Pick the next best feature. Images that were previously easy get lower weight.</div></div>
+            <div class="step"><div class="step-content"><strong>Repeat N times:</strong> Each round picks one feature. The final "strong classifier" is the weighted vote of all N weak classifiers.</div></div>
+          </div>
+          <p>This is why Haar cascades need <strong>positive images (faces) and negative images (backgrounds)</strong> during training — AdaBoost needs to learn the discrimination boundary.</p>
+        </div>
+
+        <div class="section">
+          <div class="section-label">Step 4 — The Cascade (why it's fast)</div>
+          <p>The trained features are organized into a <strong>cascade of stages</strong>. Early stages use very few features (2–5) and reject 50% of windows immediately. Only windows that pass ALL stages are considered detections.</p>
+          <div class="diagram">
+Input window → [Stage 1: 2 features] → REJECT (50% of windows eliminated here)
+                        ↓ PASS
+               [Stage 2: 10 features] → REJECT (further 30% eliminated)
+                        ↓ PASS
+               [Stage 3: 25 features] → REJECT
+                        ↓ PASS
+               [Stage N: many features] → <span class="hl">DETECTED!</span>
+
+Typical cascade: 20-25 stages, ~6000 total features.
+99.9% of non-face windows are rejected at stage 1 or 2 → very fast!</div>
+        </div>
+
+        <div class="section">
+          <div class="section-label">Sliding Window + Image Pyramid</div>
+          <p>The cascade is applied to every position at every scale. The <strong>image pyramid</strong> downscales the image by <code>scaleFactor</code> repeatedly. A 24×24 detector on a smaller image = detecting a larger face in the original.</p>
+          <div class="callout callout-trap">
+            <strong>Common Interview Trap</strong>
+            scaleFactor=1.05 means 5% size reduction per pyramid level — very slow but accurate. scaleFactor=1.3 is coarser but 3× faster. minNeighbors=3 means a window must be detected in at least 3 overlapping positions — eliminates single false-positive hits. Setting it to 0 gives thousands of false positives.
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-label">Training your own custom cascade</div>
+          <pre><span class="cm"># Step 1: Collect images</span>
+<span class="cm"># Positives: ~500+ images of your object (e.g., stop signs)</span>
+<span class="cm"># Negatives: ~1000+ images WITHOUT the object</span>
+
+<span class="cm"># Step 2: Create positive samples with annotation</span>
+<span class="fn">opencv_annotation</span> --annotations=annotations.txt --images=positives/
+
+<span class="cm"># Step 3: Create .vec file (binary format)</span>
+<span class="fn">opencv_createsamples</span> -info annotations.txt -vec positives.vec \
+  -bg negatives.txt -w <span class="nm">24</span> -h <span class="nm">24</span> -num <span class="nm">500</span>
+
+<span class="cm"># Step 4: Train the cascade</span>
+<span class="fn">opencv_traincascade</span> -data cascade_output/ -vec positives.vec \
+  -bg negatives.txt -numPos <span class="nm">450</span> -numNeg <span class="nm">900</span> \
+  -numStages <span class="nm">20</span> -w <span class="nm">24</span> -h <span class="nm">24</span> \
+  -featureType <span class="st">HAAR</span>
+
+<span class="cm"># Step 5: Use it</span>
+<span class="kw">import</span> cv2
+detector = cv2.<span class="fn">CascadeClassifier</span>(<span class="st">'cascade_output/cascade.xml'</span>)
+objects = detector.<span class="fn">detectMultiScale</span>(gray, scaleFactor=<span class="nm">1.1</span>, minNeighbors=<span class="nm">4</span>)</pre>
+          <div class="callout callout-tip">
+            <strong>Practical Tip</strong>
+            numPos should be ~90% of your actual positives — opencv_traincascade internally augments and some samples are rejected. If you set numPos equal to your actual count, training crashes partway through.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. CANNY -->
+  <div class="topic" id="canny">
+    <div class="topic-header" onclick="toggle(this)">
+      <div class="topic-title-row">
+        <div class="topic-num">CV · 02</div>
+        <div class="topic-title">Canny Edge Detection <span class="tag-coded">✓ coded</span></div>
+        <div class="topic-subtitle">4-stage pipeline from gradient to single-pixel-wide edges</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="topic-body"><div class="topic-body-inner">
+
+      <div class="section">
+        <div class="section-label">The 4 Stages</div>
+        <div class="diagram">
+Input image
+    │
+    ▼
+<span class="hl">[Stage 1] Gaussian Blur</span>  → Removes noise (noise = false edges)
+    │
+    ▼
+<span class="hl2">[Stage 2] Sobel Gradient</span> → Compute edge strength (magnitude) and direction (angle)
+    │
+    ▼
+<span class="hl3">[Stage 3] Non-Maximum Suppression</span> → Thin edges from multi-pixel blobs to 1 pixel
+    │
+    ▼
+<span class="hl">[Stage 4] Hysteresis Thresholding</span> → Keep strong edges, extend along connected weak edges</div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Stage 2 — Sobel Gradient in detail</div>
+        <p>Two 3×3 kernels are convolved with the image to get horizontal (Gx) and vertical (Gy) gradients:</p>
+        <div class="formula">
+Gx = [[-1, 0, +1], [-2, 0, +2], [-1, 0, +1]]
+Gy = [[-1,-2,-1],  [ 0, 0,  0], [+1,+2,+1]]
+
+Magnitude:  G = √(Gx² + Gy²)
+Direction:  θ = arctan(Gy / Gx)  →  rounded to 0°, 45°, 90°, or 135°</div>
+        <p>The direction tells us <em>which way</em> the edge is oriented, which is needed for non-maximum suppression.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Stage 3 — Non-Maximum Suppression (the "thinning" step)</div>
+        <p>Without this, edges are blurry blobs, not crisp lines. For each pixel, we check its two neighbors in the <strong>gradient direction</strong>. If the pixel is not a local maximum in that direction, suppress it (set to 0).</p>
+        <div class="diagram">
+Edge direction = 0° (horizontal edge, so check left-right neighbors):
+
+  Pixel at (r,c):  magnitude = <span class="hl">85</span>
+  Left neighbor:   magnitude = 40   ← smaller
+  Right neighbor:  magnitude = 30   ← smaller
+  → <span class="hl">Keep this pixel</span> (it's the local maximum)
+
+  Pixel at (r,c+1): magnitude = <span class="hl2">30</span>
+  Left neighbor:    magnitude = 85  ← LARGER
+  → <span class="hl2">Suppress this pixel</span> → set to 0</div>
+        <div class="callout callout-why">
+          <strong>Why this matters</strong>
+          A blurry Gaussian-smoothed edge might span 5 pixels wide. NMS reduces it to exactly 1 pixel at the peak. This is what makes Canny edges "clean."
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Stage 4 — Hysteresis Thresholding</div>
+        <p>Two thresholds: <code>threshold1</code> (low) and <code>threshold2</code> (high).</p>
+        <table>
+          <tr><th>Pixel magnitude</th><th>Classification</th><th>Rule</th></tr>
+          <tr><td>> threshold2</td><td><strong>Strong edge</strong></td><td>Always keep</td></tr>
+          <tr><td>threshold1 to threshold2</td><td><strong>Weak edge</strong></td><td>Keep only if connected to a strong edge</td></tr>
+          <tr><td>< threshold1</td><td><strong>Suppressed</strong></td><td>Always discard</td></tr>
+        </table>
+        <p>The 2:1 or 3:1 ratio rule: set <code>threshold2 = 2× or 3× threshold1</code>. In practice: noisy image → lower both; clean image → can afford higher threshold2.</p>
+        <pre><span class="cm"># Auto-threshold using image median (robust approach)</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np, cv2
+sigma = <span class="nm">0.33</span>
+v = np.<span class="fn">median</span>(gray)
+low  = <span class="fn">int</span>(<span class="fn">max</span>(<span class="nm">0</span>,   (<span class="nm">1.0</span> - sigma) * v))
+high = <span class="fn">int</span>(<span class="fn">min</span>(<span class="nm">255</span>, (<span class="nm">1.0</span> + sigma) * v))
+edges = cv2.<span class="fn">Canny</span>(gray, low, high)</pre>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Interview Q&A</div>
+        <div class="qa">
+          <div class="question">Why Gaussian blur first? Can't we just apply Sobel directly?</div>
+          <div class="answer">Noise in images creates sudden intensity changes that Sobel treats as edges. A single salt-and-pepper noise pixel produces a huge gradient. Gaussian smoothing averages out these random spikes before gradient computation. The kernel size controls the trade-off: larger kernel = smoother = fewer false edges but also fewer fine edges.</div>
+        </div>
+        <div class="qa">
+          <div class="question">What fails if you skip NMS?</div>
+          <div class="answer">You get thick, multi-pixel edges. Downstream steps like Hough Transform or contour finding work best with 1-pixel-wide edges. Thick edges create multiple parallel detections and bloated contour areas.</div>
+        </div>
+      </div>
+
+    </div></div>
+  </div>
+
+  <!-- 3. CONTOUR -->
+  <div class="topic" id="contour">
+    <div class="topic-header" onclick="toggle(this)">
+      <div class="topic-title-row">
+        <div class="topic-num">CV · 03</div>
+        <div class="topic-title">Contour Detection & Shape Classification <span class="tag-coded">✓ coded</span></div>
+        <div class="topic-subtitle">Douglas–Peucker, hierarchy modes, shape descriptors</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="topic-body"><div class="topic-body-inner">
+
+      <div class="section">
+        <div class="section-label">What findContours returns</div>
+        <p>OpenCV's <code>findContours</code> traces the boundary of connected white (foreground) regions in a binary image. It returns a list of curves — each curve is an ordered list of (x, y) points tracing one boundary.</p>
+        <div class="callout callout-trap">
+          <strong>Common Mistake</strong>
+          findContours modifies the input image in older OpenCV versions. Always pass a copy: <code>cv2.findContours(binary.copy(), ...)</code>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Retrieval Modes — what gets stored</div>
+        <table>
+          <tr><th>Mode</th><th>What it returns</th><th>Use when</th></tr>
+          <tr><td><strong>RETR_EXTERNAL</strong></td><td>Only outermost contours. Ignores holes and inner shapes.</td><td>Detecting objects without caring about holes</td></tr>
+          <tr><td><strong>RETR_LIST</strong></td><td>All contours, no hierarchy stored.</td><td>Fast, you only need all boundaries</td></tr>
+          <tr><td><strong>RETR_TREE</strong></td><td>All contours + full parent-child hierarchy tree.</td><td>Document scanner (outer rect → inner content)</td></tr>
+        </table>
+        <div class="diagram">
+Image: a rectangle (outer) containing a circle (inner) containing a triangle
+
+RETR_EXTERNAL returns:  [rectangle]
+RETR_TREE returns:      [rectangle]
+                            └── [circle]   (child of rectangle)
+                                    └── [triangle]  (child of circle)
+
+hierarchy[i] = [next_sibling, prev_sibling, first_child, parent]</div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Douglas–Peucker in approxPolyDP</div>
+        <p>Raw contours from a real image have hundreds of points even for a simple rectangle (because of pixel aliasing). <code>approxPolyDP</code> reduces them to just the essential corner points.</p>
+        <div class="steps">
+          <div class="step"><div class="step-content">Draw a straight line from the <strong>first to last</strong> point of the contour.</div></div>
+          <div class="step"><div class="step-content">Find the point <strong>farthest</strong> from this line. If its distance > epsilon, it's a "key point" — keep it and split the curve at that point.</div></div>
+          <div class="step"><div class="step-content">Recursively apply to the two sub-curves created by the split.</div></div>
+          <div class="step"><div class="step-content">Stop when no remaining point is farther than epsilon from the line connecting its endpoints.</div></div>
+        </div>
+        <div class="callout callout-why">
+          <strong>Epsilon choice</strong>
+          A common formula: <code>epsilon = 0.02 × perimeter</code>. For a triangle: even 10–20% of perimeter works. For a very noisy contour, increase epsilon. Too small = too many points (no shape simplification). Too large = corners merged together.
+        </div>
+        <pre><span class="cm"># Shape classification by vertex count</span>
+<span class="kw">for</span> cnt <span class="kw">in</span> contours:
+    area = cv2.<span class="fn">contourArea</span>(cnt)
+    <span class="kw">if</span> area < <span class="nm">500</span>: <span class="kw">continue</span>  <span class="cm"># skip noise</span>
+
+    peri = cv2.<span class="fn">arcLength</span>(cnt, <span class="kw">True</span>)
+    approx = cv2.<span class="fn">approxPolyDP</span>(cnt, <span class="nm">0.02</span> * peri, <span class="kw">True</span>)
+    vertices = <span class="fn">len</span>(approx)
+
+    <span class="kw">if</span>   vertices == <span class="nm">3</span>: shape = <span class="st">"triangle"</span>
+    <span class="kw">elif</span> vertices == <span class="nm">4</span>:
+        x,y,w,h = cv2.<span class="fn">boundingRect</span>(approx)
+        ratio = w / <span class="fn">float</span>(h)
+        shape = <span class="st">"square"</span> <span class="kw">if</span> <span class="nm">0.9</span> &lt;= ratio &lt;= <span class="nm">1.1</span> <span class="kw">else</span> <span class="st">"rectangle"</span>
+    <span class="kw">elif</span> vertices == <span class="nm">5</span>: shape = <span class="st">"pentagon"</span>
+    <span class="kw">else</span>:
+        <span class="cm"># Circle check: area ≈ π × (perimeter/2π)²</span>
+        circularity = <span class="nm">4</span> * np.pi * area / (peri ** <span class="nm">2</span>)
+        shape = <span class="st">"circle"</span> <span class="kw">if</span> circularity > <span class="nm">0.8</span> <span class="kw">else</span> <span class="st">"polygon"</span></pre>
+      </div>
+
+    </div></div>
+  </div>
+
+  <!-- 4. HOMOGRAPHY -->
+  <div class="topic" id="homography">
+    <div class="topic-header" onclick="toggle(this)">
+      <div class="topic-title-row">
+        <div class="topic-num">CV · 04</div>
+        <div class="topic-title">Perspective Transformation & Homography <span class="tag-coded">✓ coded</span></div>
+        <div class="topic-subtitle">Why 4 points, affine vs projective, document scanner math</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="topic-body"><div class="topic-body-inner">
+
+      <div class="section">
+        <div class="section-label">What a Homography is</div>
+        <p>A homography H is a 3×3 matrix that maps any point in one plane to a corresponding point in another plane (as seen from a different viewpoint). It encodes the full perspective transformation.</p>
+        <div class="formula">
+[x']     [h00 h01 h02]   [x]
+[y']  =  [h10 h11 h12] × [y]
+[w']     [h20 h21  1 ]   [1]
+
+Then: x_final = x'/w',  y_final = y'/w'</div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Why exactly 4 point correspondences?</div>
+        <p>The matrix H has 9 elements, but since scale doesn't matter we can fix one element (say h22=1), leaving <strong>8 unknowns</strong>. Each point correspondence gives us 2 equations (one for x, one for y). So we need 8/2 = <strong>4 points minimum</strong>.</p>
+        <ul style="color: var(--text2); font-size: 0.87rem; padding-left: 1.5rem; line-height: 2;">
+          <li>3 points → only 6 equations → underdetermined (infinite solutions)</li>
+          <li>4 points → exactly 8 equations → unique solution</li>
+          <li>5+ points → overdetermined → use least squares (findHomography with RANSAC)</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Affine vs Perspective (Projective)</div>
+        <table>
+          <tr><th>Property</th><th>Affine (6 DOF)</th><th>Perspective (8 DOF)</th></tr>
+          <tr><td>Matrix</td><td>2×3 (last row = [0,0,1])</td><td>3×3 (full)</td></tr>
+          <tr><td>Parallel lines</td><td><strong>Preserved</strong></td><td>Not preserved</td></tr>
+          <tr><td>Ratio of distances</td><td>Preserved</td><td>Not preserved</td></tr>
+          <tr><td>Looks like</td><td>Rotation + scale + shear + translation</td><td>Full camera view change</td></tr>
+          <tr><td>Points needed</td><td>3</td><td>4</td></tr>
+          <tr><td>Use case</td><td>Stitching aligned images</td><td>Document scanner, bird's-eye view</td></tr>
+        </table>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Document Scanner — point ordering bug</div>
+        <p>The points <strong>must</strong> be in order: top-left, top-right, bottom-right, bottom-left. If they're scrambled, the destination rectangle maps incorrectly.</p>
+        <pre><span class="kw">def</span> <span class="fn">order_points</span>(pts):
+    rect = np.<span class="fn">zeros</span>((<span class="nm">4</span>, <span class="nm">2</span>), dtype=<span class="st">"float32"</span>)
+    s = pts.<span class="fn">sum</span>(axis=<span class="nm">1</span>)
+    rect[<span class="nm">0</span>] = pts[np.<span class="fn">argmin</span>(s)]  <span class="cm"># Top-left:  smallest x+y</span>
+    rect[<span class="nm">2</span>] = pts[np.<span class="fn">argmax</span>(s)]  <span class="cm"># Bottom-right: largest x+y</span>
+    diff = np.<span class="fn">diff</span>(pts, axis=<span class="nm">1</span>)
+    rect[<span class="nm">1</span>] = pts[np.<span class="fn">argmin</span>(diff)]  <span class="cm"># Top-right:  smallest y-x</span>
+    rect[<span class="nm">3</span>] = pts[np.<span class="fn">argmax</span>(diff)]  <span class="cm"># Bottom-left: largest y-x</span>
+    <span class="kw">return</span> rect
+
+<span class="cm"># Then compute destination size and warp</span>
+M = cv2.<span class="fn">getPerspectiveTransform</span>(src_pts, dst_pts)
+warped = cv2.<span class="fn">warpPerspective</span>(img, M, (dst_w, dst_h))</pre>
+      </div>
+
+    </div></div>
+  </div>
+
+  <!-- 5. HSV -->
+  <div class="topic" id="hsv">
+    <div class="topic-header" onclick="toggle(this)">
+      <div class="topic-title-row">
+        <div class="topic-num">CV · 05</div>
+        <div class="topic-title">HSV Color Segmentation <span class="tag-coded">✓ coded</span></div>
+        <div class="topic-subtitle">Why HSV beats RGB, red-wrap-around bug, bitwise masking</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="topic-body"><div class="topic-body-inner">
+
+      <div class="section">
+        <div class="section-label">HSV vs RGB — the fundamental difference</div>
+        <p>In RGB, a "red" object under bright light and the same object in shadow have very different R, G, B values — making thresholding nearly impossible. In HSV, the <strong>hue</strong> (the actual color) barely changes with lighting; only <strong>value</strong> (brightness) changes.</p>
+        <div class="diagram">
+RGB of "red ball":
+  Bright sunlight:  (240, 30, 25)
+  Indoor light:     (180, 22, 18)
+  Shadow:           (90,  11, 9)
+  → <span class="hl2">Three completely different thresholds needed!</span>
+
+HSV of "red ball":
+  Bright sunlight:  H=2, S=87%, V=94%
+  Indoor light:     H=3, S=87%, V=70%
+  Shadow:           H=2, S=87%, V=35%
+  → <span class="hl">Hue stays ~2, Saturation stays ~87% — ONE threshold works!</span>
+
+HSV ranges in OpenCV: H: 0–179, S: 0–255, V: 0–255</div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">The Red Hue Wrap-Around Problem</div>
+        <p>Red sits at both ends of the hue circle: near 0° AND near 360° (which is 179 in OpenCV). A single inRange misses one half.</p>
+        <pre><span class="cm"># WRONG — misses reds near 170–179</span>
+mask = cv2.<span class="fn">inRange</span>(hsv, (<span class="nm">0</span>,<span class="nm">100</span>,<span class="nm">100</span>), (<span class="nm">10</span>,<span class="nm">255</span>,<span class="nm">255</span>))
+
+<span class="cm"># CORRECT — two masks combined</span>
+mask1 = cv2.<span class="fn">inRange</span>(hsv, (<span class="nm">0</span>,  <span class="nm">100</span>, <span class="nm">100</span>), (<span class="nm">10</span>,  <span class="nm">255</span>, <span class="nm">255</span>))
+mask2 = cv2.<span class="fn">inRange</span>(hsv, (<span class="nm">160</span>,<span class="nm">100</span>, <span class="nm">100</span>), (<span class="nm">179</span>, <span class="nm">255</span>, <span class="nm">255</span>))
+red_mask = cv2.<span class="fn">bitwise_or</span>(mask1, mask2)</pre>
+      </div>
+
+      <div class="section">
+        <div class="section-label">How inRange works internally</div>
+        <p><code>cv2.inRange(hsv, lower, upper)</code> compares each of the 3 channels independently and performs a logical AND. Output pixel = 255 if ALL channels are within range, else 0.</p>
+        <div class="formula">output[r,c] = 255  if  lower[0] ≤ H ≤ upper[0]  AND  lower[1] ≤ S ≤ upper[1]  AND  lower[2] ≤ V ≤ upper[2]
+output[r,c] = 0    otherwise</div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Bitwise AND with mask explained</div>
+        <pre><span class="cm"># result[r,c] = frame[r,c]  if  mask[r,c] == 255</span>
+<span class="cm"># result[r,c] = (0,0,0)     if  mask[r,c] == 0</span>
+result = cv2.<span class="fn">bitwise_and</span>(frame, frame, mask=red_mask)
+
+<span class="cm"># This works because: pixel AND pixel = pixel (when both are same)</span>
+<span class="cm"># AND 0 = 0, AND 255 = original value</span></pre>
+      </div>
+
+    </div></div>
+  </div>
+
+  <!-- 6. MORPHOLOGY -->
+  <div class="topic" id="morphology">
+    <div class="topic-header" onclick="toggle(this)">
+      <div class="topic-title-row">
+        <div class="topic-num">CV · 06</div>
+        <div class="topic-title">Morphological Operations <span class="tag-coded">✓ coded</span></div>
+        <div class="topic-subtitle">Erosion, dilation, opening, closing — set theory to practice</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="topic-body"><div class="topic-body-inner">
+
+      <div class="section">
+        <div class="section-label">Erosion — shrink foreground</div>
+        <p>For each pixel position, place the structuring element (kernel) centered there. If <strong>ALL</strong> kernel pixels overlap with foreground (white), the output pixel is white. Otherwise black. This erodes the boundary.</p>
+        <div class="diagram">
+3×3 kernel (all ones). Binary image with a blob:
+
+Before erosion:            After erosion (3×3):
+  0 0 0 0 0                  0 0 0 0 0
+  0 1 1 1 0                  0 0 0 0 0    ← outer ring removed
+  0 1 1 1 0                  0 0 1 0 0
+  0 1 1 1 0                  0 0 0 0 0
+  0 0 0 0 0                  0 0 0 0 0
+
+<span class="hl">Effect: removes small blobs entirely, shrinks larger shapes</span>
+<span class="hl2">Also separates objects that are touching by a thin bridge</span></div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Dilation — expand foreground</div>
+        <p>For each pixel position, if <strong>ANY</strong> kernel pixel overlaps with foreground, the output is white. This expands the boundary outward.</p>
+        <div class="callout callout-why">
+          <strong>Practical example</strong>
+          After Canny edge detection, edges may have tiny gaps. Dilation "grows" edges slightly to close these gaps, making contours continuous. Then you can run findContours successfully.
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Opening vs Closing — remember by effect</div>
+        <table>
+          <tr><th>Operation</th><th>Formula</th><th>Removes</th><th>Use case</th></tr>
+          <tr><td><strong>Opening</strong></td><td>Erode → Dilate</td><td>Small bright blobs (noise in foreground)</td><td>Remove salt noise from binary mask</td></tr>
+          <tr><td><strong>Closing</strong></td><td>Dilate → Erode</td><td>Small dark holes (gaps in foreground)</td><td>Fill small holes in detected shapes</td></tr>
+        </table>
+        <div class="callout callout-tip">
+          <strong>Memory trick</strong>
+          Opening = starts with Erosion = makes things smaller first → removes small objects. Closing = starts with Dilation = makes things bigger first → fills holes.
+        </div>
+        <pre><span class="kw">import</span> cv2, numpy <span class="kw">as</span> np
+kernel = np.<span class="fn">ones</span>((<span class="nm">5</span>,<span class="nm">5</span>), np.uint8)
+
+<span class="cm"># Remove salt noise (scattered white pixels)</span>
+opened  = cv2.<span class="fn">morphologyEx</span>(mask, cv2.MORPH_OPEN,  kernel)
+<span class="cm"># Fill small holes inside white regions</span>
+closed  = cv2.<span class="fn">morphologyEx</span>(mask, cv2.MORPH_CLOSE, kernel)
+<span class="cm"># Ellipse kernel = more circular, natural-looking results</span>
+kernel2 = cv2.<span class="fn">getStructuringElement</span>(cv2.MORPH_ELLIPSE, (<span class="nm">7</span>,<span class="nm">7</span>))</pre>
+      </div>
+
+    </div></div>
+  </div>
+
+  <!-- 7. DNN/YOLO -->
+  <div class="topic" id="dnn">
+    <div class="topic-header" onclick="toggle(this)">
+      <div class="topic-title-row">
+        <div class="topic-num">CV · 07</div>
+        <div class="topic-title">DNN / YOLO Object Detection <span class="tag-study">to study</span></div>
+        <div class="topic-subtitle">Single-shot detection, NMS from scratch, Haar vs deep learning</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="topic-body"><div class="topic-body-inner">
+
+      <div class="section">
+        <div class="section-label">Haar vs YOLO — architectural comparison</div>
+        <table>
+          <tr><th>Aspect</th><th>Haar Cascade</th><th>YOLO</th></tr>
+          <tr><td>Inference path</td><td>Sliding window at every position and every scale (pyramid)</td><td>Single forward pass through the network — image processed ONCE</td></tr>
+          <tr><td>Features</td><td>Hand-crafted rectangular patterns</td><td>Learned convolutional features (millions of parameters)</td></tr>
+          <tr><td>Speed</td><td>Fast on CPU for simple objects</td><td>YOLOv8 real-time on GPU, slower on CPU</td></tr>
+          <tr><td>Accuracy</td><td>Low (sensitive to lighting, angle)</td><td>High (handles rotation, occlusion)</td></tr>
+          <tr><td>Training data</td><td>~500 positives sufficient</td><td>Needs thousands+ annotated images</td></tr>
+        </table>
+      </div>
+
+      <div class="section">
+        <div class="section-label">How YOLO processes an image (one pass)</div>
+        <div class="steps">
+          <div class="step"><div class="step-content"><strong>Divide into grid</strong> — e.g., 13×13 cells for a 416×416 image. Each cell is responsible for detecting objects whose center falls within it.</div></div>
+          <div class="step"><div class="step-content"><strong>Predict bounding boxes</strong> — each cell predicts B anchor boxes. Each box: (x, y, w, h, confidence). Confidence = P(object) × IoU.</div></div>
+          <div class="step"><div class="step-content"><strong>Predict class probabilities</strong> — each cell also predicts class scores (e.g., person=0.9, car=0.05, dog=0.02).</div></div>
+          <div class="step"><div class="step-content"><strong>Apply NMS</strong> — filter out overlapping detections. Keep only the most confident box per object.</div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">NMS (Non-Maximum Suppression) from scratch</div>
+        <p>IoU (Intersection over Union) = area of overlap / area of union between two boxes.</p>
+        <pre><span class="kw">def</span> <span class="fn">nms</span>(boxes, scores, iou_threshold=<span class="nm">0.4</span>):
+    <span class="st">"""boxes: list of [x1,y1,x2,y2]. scores: confidence values."""</span>
+    indices = <span class="fn">sorted</span>(<span class="fn">range</span>(<span class="fn">len</span>(scores)), key=<span class="kw">lambda</span> i: scores[i], reverse=<span class="kw">True</span>)
+    kept = []
+    <span class="kw">while</span> indices:
+        current = indices[<span class="nm">0</span>]
+        kept.<span class="fn">append</span>(current)
+        indices = indices[<span class="nm">1</span>:]
+        <span class="cm"># Remove any box that heavily overlaps with 'current'</span>
+        indices = [i <span class="kw">for</span> i <span class="kw">in</span> indices <span class="kw">if</span> <span class="fn">compute_iou</span>(boxes[current], boxes[i]) &lt; iou_threshold]
+    <span class="kw">return</span> kept
+
+<span class="kw">def</span> <span class="fn">compute_iou</span>(a, b):
+    ix1, iy1 = <span class="fn">max</span>(a[<span class="nm">0</span>],b[<span class="nm">0</span>]), <span class="fn">max</span>(a[<span class="nm">1</span>],b[<span class="nm">1</span>])
+    ix2, iy2 = <span class="fn">min</span>(a[<span class="nm">2</span>],b[<span class="nm">2</span>]), <span class="fn">min</span>(a[<span class="nm">3</span>],b[<span class="nm">3</span>])
+    inter = <span class="fn">max</span>(<span class="nm">0</span>, ix2-ix1) * <span class="fn">max</span>(<span class="nm">0</span>, iy2-iy1)
+    area_a = (a[<span class="nm">2</span>]-a[<span class="nm">0</span>]) * (a[<span class="nm">3</span>]-a[<span class="nm">1</span>])
+    area_b = (b[<span class="nm">2</span>]-b[<span class="nm">0</span>]) * (b[<span class="nm">3</span>]-b[<span class="nm">1</span>])
+    <span class="kw">return</span> inter / (area_a + area_b - inter)</pre>
+        <div class="callout callout-why">
+          <strong>Why IoU threshold matters</strong>
+          IoU=0.4 means: if two boxes share more than 40% of their combined area, the lower-confidence one is removed. Low threshold = aggressive suppression (may remove valid overlapping objects like two people standing close). High threshold = lenient (may keep duplicate detections).
+        </div>
+      </div>
+
+    </div></div>
+  </div>
+
+  <!-- 8. OPTICAL FLOW -->
+  <div class="topic" id="optflow">
+    <div class="topic-header" onclick="toggle(this)">
+      <div class="topic-title-row">
+        <div class="topic-num">CV · 08</div>
+        <div class="topic-title">Optical Flow <span class="tag-study">to study</span></div>
+        <div class="topic-subtitle">Brightness constancy, aperture problem, Lucas-Kanade vs Farneback</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="topic-body"><div class="topic-body-inner">
+
+      <div class="section">
+        <div class="section-label">Core Assumption — Brightness Constancy</div>
+        <p>A pixel that moved from (x,y) at time t to (x+u, y+v) at time t+1 has the <strong>same intensity</strong>:</p>
+        <div class="formula">I(x, y, t) = I(x+u, y+v, t+1)</div>
+        <p>Expand with Taylor series → <strong>Optical Flow Constraint Equation:</strong></p>
+        <div class="formula">Ix·u + Iy·v + It = 0
+
+Ix, Iy = spatial gradients (Sobel)
+It = temporal gradient (frame difference)
+u, v = unknown flow we want to find</div>
+        <p>This is ONE equation with TWO unknowns (u, v). Unsolvable alone — this is the <strong>aperture problem</strong>.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Aperture Problem & Lucas-Kanade's Solution</div>
+        <p>If you watch an edge move through a small window, you can only tell motion perpendicular to the edge — not parallel. A vertical edge moving diagonally looks identical to it moving horizontally.</p>
+        <p>Lucas-Kanade assumes all pixels in a <strong>small window</strong> around a point have the same motion (u, v). This gives us many equations (one per pixel in window) for the same 2 unknowns → solve with least squares:</p>
+        <div class="formula">A^T A [u, v]^T = A^T b
+
+A = matrix of [Ix, Iy] for each pixel in window
+b = vector of [-It] for each pixel</div>
+        <div class="callout callout-trap">
+          <strong>When brightness constancy breaks down</strong>
+          Specular reflections (shiny objects change appearance when viewed from different angles), large displacements between frames (assume small motion), illumination changes (light turns on). Also fails on textureless regions — if A^T·A is near-singular (low-texture patch), the flow estimate is unreliable.
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Sparse (Lucas-Kanade) vs Dense (Farneback) Flow</div>
+        <table>
+          <tr><th>Method</th><th>Tracks</th><th>Speed</th><th>Use case</th></tr>
+          <tr><td><strong>Lucas-Kanade (sparse)</strong></td><td>Pre-selected corner points (goodFeaturesToTrack)</td><td>Fast</td><td>Tracking specific landmarks, SLAM</td></tr>
+          <tr><td><strong>Farneback (dense)</strong></td><td>Every pixel</td><td>Slower</td><td>Motion visualization, action recognition</td></tr>
+        </table>
+        <pre><span class="cm"># Sparse flow: track corners between frames</span>
+p0 = cv2.<span class="fn">goodFeaturesToTrack</span>(gray1, maxCorners=<span class="nm">100</span>, qualityLevel=<span class="nm">0.3</span>, minDistance=<span class="nm">7</span>)
+p1, status, err = cv2.<span class="fn">calcOpticalFlowPyrLK</span>(gray1, gray2, p0, <span class="kw">None</span>)
+<span class="cm"># status[i]=1 means feature was found in frame 2</span>
+good_old = p0[status == <span class="nm">1</span>]
+good_new = p1[status == <span class="nm">1</span>]
+<span class="cm"># Vectors (good_old → good_new) = motion of each feature</span></pre>
+      </div>
+
+    </div></div>
+  </div>
+
+  <!-- 9. CAMERA CALIBRATION -->
+  <div class="topic" id="calibration">
+    <div class="topic-header" onclick="toggle(this)">
+      <div class="topic-title-row">
+        <div class="topic-num">CV · 09</div>
+        <div class="topic-title">Camera Calibration & Lens Distortion <span class="tag-study">to study</span></div>
+        <div class="topic-subtitle">Intrinsic matrix, distortion coefficients, real-world measurement</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="topic-body"><div class="topic-body-inner">
+
+      <div class="section">
+        <div class="section-label">The Camera Intrinsic Matrix K</div>
+        <p>K transforms a 3D point in camera coordinates to a 2D pixel location:</p>
+        <div class="formula">K = [[fx,  0, cx],
+     [ 0, fy, cy],
+     [ 0,  0,  1]]
+
+fx, fy = focal length in pixels (how "zoomed" the lens is)
+cx, cy = principal point (where optical axis hits the image, ideally image center)
+
+Projection: [u, v, 1]^T = K × [X/Z, Y/Z, 1]^T</div>
+        <div class="callout callout-why">
+          <strong>Physical meaning</strong>
+          A point 1 meter in front of the camera, 10cm to the right, appears at pixel: u = fx × (0.1/1.0) + cx. If fx=800 pixels, the point is 80 pixels to the right of center. If you double the focal length (zoom in), the point appears 160 pixels to the right — it looks farther from center.
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Distortion Coefficients</div>
+        <table>
+          <tr><th>Type</th><th>Coefficients</th><th>Effect</th><th>Common in</th></tr>
+          <tr><td><strong>Radial</strong></td><td>k1, k2, k3</td><td>Barrel or pincushion warping (edges bend in/out)</td><td>Wide-angle, fisheye lenses</td></tr>
+          <tr><td><strong>Tangential</strong></td><td>p1, p2</td><td>Image tilted (sensor not parallel to lens)</td><td>All cameras slightly</td></tr>
+        </table>
+        <div class="formula">x_distorted = x(1 + k1·r² + k2·r⁴) + 2p1·xy + p2(r²+2x²)
+y_distorted = y(1 + k1·r² + k2·r⁴) + p1(r²+2y²) + 2p2·xy
+where r² = x² + y²</div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Why a Checkerboard? Calibration Pipeline</div>
+        <p>Checkerboard corners are easy to detect with sub-pixel accuracy (cv2.findChessboardCorners). Their real-world positions are known exactly (e.g., 25mm grid). This gives many 3D→2D point correspondences to solve for K and distortion.</p>
+        <pre><span class="kw">import</span> cv2, numpy <span class="kw">as</span> np, glob
+
+objp = np.<span class="fn">zeros</span>((<span class="nm">9</span>*<span class="nm">6</span>, <span class="nm">3</span>), np.float32)
+objp[:, :<span class="nm">2</span>] = np.<span class="fn">mgrid</span>[<span class="nm">0</span>:<span class="nm">9</span>, <span class="nm">0</span>:<span class="nm">6</span>].<span class="fn">T</span>.<span class="fn">reshape</span>(-<span class="nm">1</span>, <span class="nm">2</span>) * <span class="nm">25</span>  <span class="cm"># 25mm squares</span>
+obj_points, img_points = [], []
+
+<span class="kw">for</span> fname <span class="kw">in</span> glob.<span class="fn">glob</span>(<span class="st">'calib_images/*.jpg'</span>):
+    img = cv2.<span class="fn">imread</span>(fname)
+    gray = cv2.<span class="fn">cvtColor</span>(img, cv2.COLOR_BGR2GRAY)
+    ret, corners = cv2.<span class="fn">findChessboardCorners</span>(gray, (<span class="nm">9</span>,<span class="nm">6</span>), <span class="kw">None</span>)
+    <span class="kw">if</span> ret:
+        obj_points.<span class="fn">append</span>(objp)
+        corners2 = cv2.<span class="fn">cornerSubPix</span>(gray, corners, (<span class="nm">11</span>,<span class="nm">11</span>), (-<span class="nm">1</span>,-<span class="nm">1</span>),
+            (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, <span class="nm">30</span>, <span class="nm">0.001</span>))
+        img_points.<span class="fn">append</span>(corners2)
+
+ret, K, dist, rvecs, tvecs = cv2.<span class="fn">calibrateCamera</span>(obj_points, img_points, gray.shape[::<span class="nm">-1</span>], <span class="kw">None</span>, <span class="kw">None</span>)
+<span class="cm"># K is now your camera matrix, dist = distortion coefficients</span>
+
+<span class="cm"># Real-world size estimation: if object is at known depth Z</span>
+<span class="cm"># real_width = pixel_width × Z / fx</span></pre>
+      </div>
+
+    </div></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       ROS2 & ROBOTICS
+  ══════════════════════════════════════════ -->
+  <div class="domain-header">
+    <div class="domain-line"></div>
+    <span class="domain-label dl-ros">ROS2 & Robotics</span>
+    <div class="domain-line"></div>
+  </div>
+
+  <!-- 10. ARUCO -->
+  <div class="topic" id="aruco">
+    <div class="topic-header" onclick="toggle(this)">
+      <div class="topic-title-row">
+        <div class="topic-num">ROS · 01</div>
+        <div class="topic-title">ArUco Marker Localization <span class="tag-coded">✓ coded</span></div>
+        <div class="topic-subtitle">solvePnP internals, 6-DOF pose, stabilization techniques</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="topic-body"><div class="topic-body-inner">
+
+      <div class="section">
+        <div class="section-label">What ArUco detection gives you</div>
+        <p>ArUco finds 4 corner points of the marker in image coordinates (pixels). Combined with the camera intrinsic matrix K and the known physical marker size, <code>solvePnP</code> computes where the marker is in 3D space relative to the camera.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-label">solvePnP — how it works</div>
+        <p>PnP = "Perspective-n-Points". Given n 3D points (marker corners in marker coordinates) and their 2D projections (detected pixel corners), find the rotation R and translation t that explains the projection.</p>
+        <div class="formula">For each corner i:
+  pixel_i = K × [R | t] × world_i_3D
+
+Solve for R (3 values) and t (3 values) = 6 DOF pose</div>
+        <table>
+          <tr><th>Algorithm flag</th><th>Method</th><th>When to use</th></tr>
+          <tr><td>cv2.SOLVEPNP_ITERATIVE</td><td>Levenberg-Marquardt minimization</td><td>Default, good for small noise</td></tr>
+          <tr><td>cv2.SOLVEPNP_EPNP</td><td>Algebraic, fast, non-iterative</td><td>Real-time, initial estimate</td></tr>
+          <tr><td>cv2.SOLVEPNP_IPPE</td><td>For planar point sets</td><td>Best for flat markers like ArUco</td></tr>
+        </table>
+        <div class="callout callout-trap">
+          <strong>Why calibration is mandatory</strong>
+          solvePnP uses K to "undo" the camera projection. If K is wrong (uncalibrated), the 3D position will be systematically off. Even small distortion errors cause large position errors, especially at angles.
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Reducing pose jitter</div>
+        <pre><span class="cm"># Method 1: Exponential moving average (simple)</span>
+alpha = <span class="nm">0.3</span>  <span class="cm"># 0=no update, 1=raw value</span>
+smooth_tvec = alpha * new_tvec + (<span class="nm">1</span> - alpha) * smooth_tvec
+
+<span class="cm"># Method 2: Median filter over last N frames</span>
+<span class="kw">from</span> collections <span class="kw">import</span> deque
+buffer = deque(maxlen=<span class="nm">5</span>)
+buffer.<span class="fn">append</span>(tvec)
+stable_tvec = np.<span class="fn">median</span>(np.<span class="fn">array</span>(buffer), axis=<span class="nm">0</span>)
+
+<span class="cm"># Method 3: Kalman filter (best — see Kalman section)</span></pre>
+      </div>
+
+    </div></div>
+  </div>
+
+  <!-- 11. APF -->
+  <div class="topic" id="apf">
+    <div class="topic-header" onclick="toggle(this)">
+      <div class="topic-title-row">
+        <div class="topic-num">ROS · 02</div>
+        <div class="topic-title">Artificial Potential Fields Navigation <span class="tag-coded">✓ coded</span></div>
+        <div class="topic-subtitle">Force equations, local minima, gain tuning</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="topic-body"><div class="topic-body-inner">
+
+      <div class="section">
+        <div class="section-label">The Core Idea</div>
+        <p>Treat the robot as a particle in a force field. The <strong>goal</strong> attracts it like a magnet. <strong>Obstacles</strong> repel it like a magnet of opposite polarity. The robot follows the combined force gradient downhill to the goal.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Force Equations</div>
+        <div class="formula">Attractive force:
+  F_att = -ζ × (robot_pos - goal_pos)
+  where ζ (zeta) = attractive gain constant
+
+Repulsive force (for each obstacle):
+  If distance d > d0:  F_rep = 0  (outside influence radius)
+  If distance d ≤ d0:
+    F_rep = η × (1/d - 1/d0) × (1/d²) × unit_vector_away_from_obstacle
+  where η (eta) = repulsive gain, d0 = influence radius
+
+Total force:
+  F_total = F_att + Σ F_rep_i</div>
+        <div class="callout callout-trap">
+          <strong>Local Minima Problem</strong>
+          If attractive and repulsive forces exactly cancel, the robot stops permanently before reaching the goal. This happens when a goal is directly behind an obstacle. Fixes: (1) Add random walk noise when velocity near zero, (2) Use virtual obstacles to push robot sideways, (3) Switch to global planner (A*) when stuck.
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Gain tuning in practice</div>
+        <table>
+          <tr><th>If robot does...</th><th>Problem</th><th>Fix</th></tr>
+          <tr><td>Oscillates around goal</td><td>ζ too high</td><td>Reduce ζ or add velocity damping</td></tr>
+          <tr><td>Doesn't avoid obstacles</td><td>η too low or d0 too small</td><td>Increase η or d0</td></tr>
+          <tr><td>Freezes far from obstacles</td><td>d0 too large — repulsion reaches goal area</td><td>Reduce d0</td></tr>
+          <tr><td>Slow convergence</td><td>ζ too low</td><td>Increase ζ</td></tr>
+        </table>
+      </div>
+
+    </div></div>
+  </div>
+
+  <!-- 12. TF2 -->
+  <div class="topic" id="tf2">
+    <div class="topic-header" onclick="toggle(this)">
+      <div class="topic-title-row">
+        <div class="topic-num">ROS · 03</div>
+        <div class="topic-title">TF2 Coordinate Frame Transforms <span class="tag-coded">✓ coded</span></div>
+        <div class="topic-subtitle">TF tree, static vs dynamic, lookupTransform internals</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="topic-body"><div class="topic-body-inner">
+
+      <div class="section">
+        <div class="section-label">What the TF Tree is</div>
+        <p>Every robot has multiple coordinate frames (world, base_link, camera, arm joints). TF2 maintains a tree of transforms between them, timestamped. To convert a point from camera_frame to base_link, TF2 chains the transforms: camera → arm_link → base_link.</p>
+        <div class="diagram">
+world
+  └── odom
+        └── base_link           (mobile base — published by odometry)
+              ├── base_laser     (static — lidar mounted fixed)
+              ├── camera_link    (static — camera mounted fixed)
+              └── arm_base
+                    └── arm_link1
+                          └── arm_link2
+                                └── end_effector  (changes every joint update)
+
+<span class="hl">Static transforms</span>: don't change (sensor mounts). Published ONCE.
+<span class="hl2">Dynamic transforms</span>: change at runtime (joints, odometry). Published repeatedly.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">lookupTransform — what happens internally</div>
+        <div class="steps">
+          <div class="step"><div class="step-content">TF2 receives the request: "give me the transform from <code>camera_link</code> to <code>base_link</code> at time T."</div></div>
+          <div class="step"><div class="step-content">It searches the <strong>TF buffer</strong> (a time-indexed store of recent transforms) for the path through the tree connecting both frames.</div></div>
+          <div class="step"><div class="step-content">Each edge in the path has timestamped transforms. TF2 <strong>interpolates</strong> between the two nearest timestamps to get the exact time T.</div></div>
+          <div class="step"><div class="step-content">All transforms along the path are <strong>chained</strong> (matrix multiplied) to produce the final result.</div></div>
+        </div>
+        <pre><span class="kw">import</span> rclpy
+<span class="kw">from</span> tf2_ros <span class="kw">import</span> Buffer, TransformListener
+<span class="kw">from</span> tf2_geometry_msgs <span class="kw">import</span> do_transform_point
+
+tf_buffer = <span class="fn">Buffer</span>()
+tf_listener = <span class="fn">TransformListener</span>(tf_buffer, node)
+
+<span class="cm"># Get transform: from camera to base_link</span>
+t = tf_buffer.<span class="fn">lookup_transform</span>(
+    <span class="st">'base_link'</span>,      <span class="cm"># target frame</span>
+    <span class="st">'camera_link'</span>,    <span class="cm"># source frame</span>
+    rclpy.time.<span class="fn">Time</span>() <span class="cm"># latest available</span>
+)
+<span class="cm"># Transform a point detected in camera frame to base_link</span>
+point_in_base = <span class="fn">do_transform_point</span>(point_stamped, t)</pre>
+        <div class="callout callout-trap">
+          <strong>ExtrapolationException</strong>
+          If you request a time before TF has received data, or after the buffer window (default 10s), TF throws ExtrapolationException. Fix: use Time() for "latest", or wrap in try-except and wait.
+        </div>
+      </div>
+
+    </div></div>
+  </div>
+
+  <!-- 13. HOUGH -->
+  <div class="topic" id="hough">
+    <div class="topic-header" onclick="toggle(this)">
+      <div class="topic-title-row">
+        <div class="topic-num">ROS · 04</div>
+        <div class="topic-title">Hough Transform <span class="tag-coded">✓ coded</span></div>
+        <div class="topic-subtitle">Accumulator, ρ-θ space, why Canny first</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="topic-body"><div class="topic-body-inner">
+
+      <div class="section">
+        <div class="section-label">The Core Insight — voting in parameter space</div>
+        <p>A line in image space can be described as ρ = x·cos(θ) + y·sin(θ), where ρ = perpendicular distance from origin, θ = angle of the line. An edge pixel at (x,y) could belong to any line passing through it — which is a <strong>sinusoid</strong> in (ρ, θ) parameter space.</p>
+        <div class="diagram">
+Image space:            Parameter (ρ, θ) space:
+                         θ →
+y                        ┌──────────────────┐
+│  • pixel (x1,y1)      │    sinusoid for   │
+│                        │    pixel (x1,y1)  │  ← each pixel votes for
+│  • pixel (x2,y2)      │                   │     all lines through it
+│                        │    sinusoid for   │
+└──────── x              │    pixel (x2,y2)  │
+                         └──────────────────┘
+If two sinusoids intersect at (ρ*, θ*):
+<span class="hl">→ Both pixels lie on the same line! That line is y = ρ* / sin(θ* + ...)</span></div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">The Accumulator</div>
+        <p>A 2D array indexed by (ρ, θ). Each edge pixel increments all cells along its sinusoid. Local maxima in the accumulator = strong lines in the image. <code>threshold</code> in HoughLines = minimum votes needed to count as a line.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-label">HoughCircles — extra parameter</div>
+        <pre><span class="cm"># minDist: min distance between circle centers (prevents duplicates)</span>
+<span class="cm"># param1: Canny high threshold applied internally</span>
+<span class="cm"># param2: accumulator threshold for center detection</span>
+circles = cv2.<span class="fn">HoughCircles</span>(gray, cv2.HOUGH_GRADIENT,
+    dp=<span class="nm">1</span>, minDist=<span class="nm">50</span>, param1=<span class="nm">100</span>, param2=<span class="nm">30</span>,
+    minRadius=<span class="nm">10</span>, maxRadius=<span class="nm">100</span>)</pre>
+        <div class="callout callout-why">
+          <strong>Why Canny must come first</strong>
+          HoughLines votes once per edge pixel. If you feed a full grayscale image, every non-edge pixel also votes, creating massive noise in the accumulator. Canny reduces the voting population to only actual edges — increasing the signal-to-noise ratio dramatically.
+        </div>
+      </div>
+
+    </div></div>
+  </div>
+
+  <!-- 14. LIDAR -->
+  <div class="topic" id="lidar">
+    <div class="topic-header" onclick="toggle(this)">
+      <div class="topic-title-row">
+        <div class="topic-num">ROS · 05</div>
+        <div class="topic-title">LiDAR & Occupancy Grid Mapping <span class="tag-coded">✓ coded</span></div>
+        <div class="topic-subtitle">Polar to cartesian, log-odds update, APF integration</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="topic-body"><div class="topic-body-inner">
+
+      <div class="section">
+        <div class="section-label">Polar to Cartesian conversion</div>
+        <p>A 2D LiDAR scan returns an array of (range, angle) pairs. Each measurement = distance to nearest obstacle at that angle.</p>
+        <div class="formula">For scan[i] with range r_i and angle θ_i:
+  x_i = r_i × cos(θ_i)
+  y_i = r_i × sin(θ_i)
+
+θ_i = angle_min + i × angle_increment  (from LaserScan message)</div>
+        <pre><span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">scan_to_points</span>(ranges, angle_min, angle_increment):
+    angles = angle_min + np.<span class="fn">arange</span>(<span class="fn">len</span>(ranges)) * angle_increment
+    valid = np.<span class="fn">isfinite</span>(ranges) & (np.<span class="fn">array</span>(ranges) > <span class="nm">0.1</span>)
+    r = np.<span class="fn">array</span>(ranges)[valid]
+    th = angles[valid]
+    xs = r * np.<span class="fn">cos</span>(th)
+    ys = r * np.<span class="fn">sin</span>(th)
+    <span class="kw">return</span> np.<span class="fn">column_stack</span>([xs, ys])</pre>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Occupancy Grid — Log-Odds Update</div>
+        <p>Each cell stores the log-odds of being occupied: L = log(P(occupied) / P(free)). Positive = likely occupied, negative = likely free, 0 = unknown.</p>
+        <div class="formula">Update on obstacle hit:    L_cell += L_occ  (e.g., +0.85)
+Update on free (ray pass): L_cell += L_free (e.g., -0.4)
+Clamp: L = max(L_min, min(L_max, L))
+
+P(occupied) = 1 - 1/(1 + exp(L))</div>
+        <div class="callout callout-why">
+          <strong>Why log-odds instead of direct probability?</strong>
+          Adding log-odds is equivalent to multiplying probabilities. Addition is faster and numerically stable — probabilities near 0 or 1 would underflow in floating point.
+        </div>
+      </div>
+
+    </div></div>
+  </div>
+
+  <!-- 15. QUATERNION -->
+  <div class="topic" id="quaternion">
+    <div class="topic-header" onclick="toggle(this)">
+      <div class="topic-title-row">
+        <div class="topic-num">ROS · 06</div>
+        <div class="topic-title">Quaternion Math & 3D Rotation <span class="tag-coded">✓ coded</span></div>
+        <div class="topic-subtitle">Gimbal lock, composition, yaw to quaternion by hand</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="topic-body"><div class="topic-body-inner">
+
+      <div class="section">
+        <div class="section-label">Gimbal Lock — why Euler angles fail</div>
+        <p>Euler angles represent rotation as three sequential rotations (Roll, Pitch, Yaw). When pitch = 90°, the roll and yaw axes align — rotating one has the same effect as rotating the other. You lose one degree of freedom.</p>
+        <div class="diagram">
+Normal: Roll (X) → Pitch (Y) → Yaw (Z) are 3 independent axes.
+
+When Pitch = 90°:
+  Roll axis (X) rotates... and now points the same direction as Yaw axis (Z)
+  You cannot independently control roll and yaw anymore!
+  → <span class="hl2">Gimbal Lock: 3-axis system reduces to 2-axis</span>
+
+<span class="hl">Quaternions avoid this: they represent rotation as a single axis + angle.</span>
+No sequential rotation → no axis alignment problem.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Quaternion structure q = (w, x, y, z)</div>
+        <div class="formula">q = w + xi + yj + zk
+
+Physical interpretation:
+  Rotation by angle θ around unit axis (ax, ay, az):
+  w = cos(θ/2)
+  x = ax × sin(θ/2)
+  y = ay × sin(θ/2)
+  z = az × sin(θ/2)
+
+Constraint: w² + x² + y² + z² = 1 (unit quaternion)</div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Yaw-only rotation to quaternion (by hand)</div>
+        <p>A yaw of angle θ is a rotation around the Z-axis: (ax, ay, az) = (0, 0, 1)</p>
+        <div class="formula">w = cos(θ/2),  x = 0,  y = 0,  z = sin(θ/2)</div>
+        <pre><span class="kw">import</span> math
+<span class="kw">from</span> geometry_msgs.msg <span class="kw">import</span> Quaternion
+
+<span class="kw">def</span> <span class="fn">yaw_to_quaternion</span>(yaw):
+    q = <span class="fn">Quaternion</span>()
+    q.w = math.<span class="fn">cos</span>(yaw / <span class="nm">2.0</span>)
+    q.x = <span class="nm">0.0</span>
+    q.y = <span class="nm">0.0</span>
+    q.z = math.<span class="fn">sin</span>(yaw / <span class="nm">2.0</span>)
+    <span class="kw">return</span> q
+
+<span class="cm"># Composing two rotations: q_total = q2 * q1 (apply q1 first, then q2)</span>
+<span class="cm"># In tf_transformations:</span>
+<span class="kw">from</span> tf_transformations <span class="kw">import</span> quaternion_multiply
+q_total = <span class="fn">quaternion_multiply</span>(q2, q1)</pre>
+        <div class="callout callout-tip">
+          <strong>Rotation matrix from quaternion (for interviews)</strong>
+          R[0][0] = 1-2(y²+z²), R[0][1] = 2(xy-wz), R[0][2] = 2(xz+wy) ... The full 3×3 can be derived from the quaternion multiplication formula. In practice, use scipy or tf_transformations.
+        </div>
+      </div>
+
+    </div></div>
+  </div>
+
+  <!-- 16. QoS -->
+  <div class="topic" id="qos">
+    <div class="topic-header" onclick="toggle(this)">
+      <div class="topic-title-row">
+        <div class="topic-num">ROS · 07</div>
+        <div class="topic-title">ROS2 QoS & DDS Communication <span class="tag-study">to study</span></div>
+        <div class="topic-subtitle">RELIABLE vs BEST_EFFORT, DDS discovery, silent data loss</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="topic-body"><div class="topic-body-inner">
+
+      <div class="section">
+        <div class="section-label">QoS Policies that matter</div>
+        <table>
+          <tr><th>Policy</th><th>Options</th><th>Choose when</th></tr>
+          <tr><td><strong>Reliability</strong></td><td>RELIABLE: retransmit until acknowledged<br>BEST_EFFORT: send once, don't retry</td><td>RELIABLE for critical commands, BEST_EFFORT for sensor data (prefer fresh over complete)</td></tr>
+          <tr><td><strong>History</strong></td><td>KEEP_LAST(N): store N most recent<br>KEEP_ALL: store everything</td><td>KEEP_LAST for real-time; KEEP_ALL for data logging</td></tr>
+          <tr><td><strong>Durability</strong></td><td>VOLATILE: only live subscribers get messages<br>TRANSIENT_LOCAL: late-joining subscribers get last message</td><td>TRANSIENT_LOCAL for map/config topics; VOLATILE for sensor streams</td></tr>
+          <tr><td><strong>Deadline</strong></td><td>Duration before missing message triggers warning</td><td>Safety-critical topics (motor commands)</td></tr>
+        </table>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Silent Data Loss — the most dangerous QoS bug</div>
+        <div class="callout callout-trap">
+          <strong>The Mismatch Problem</strong>
+          If publisher is BEST_EFFORT and subscriber requests RELIABLE, ROS2's DDS layer considers them incompatible. They do NOT communicate — no error is shown! The subscriber receives nothing but no exception is raised. Always verify QoS compatibility with ros2 topic info -v.
+        </div>
+        <pre><span class="kw">from</span> rclpy.qos <span class="kw">import</span> QoSProfile, ReliabilityPolicy, DurabilityPolicy
+
+<span class="cm"># For LiDAR sensor data — prefer fresh, tolerate loss</span>
+sensor_qos = <span class="fn">QoSProfile</span>(
+    reliability=ReliabilityPolicy.BEST_EFFORT,
+    depth=<span class="nm">5</span>
+)
+
+<span class="cm"># For robot commands — must be delivered</span>
+cmd_qos = <span class="fn">QoSProfile</span>(
+    reliability=ReliabilityPolicy.RELIABLE,
+    depth=<span class="nm">10</span>
+)
+
+<span class="cm"># Check: ros2 topic info /scan -v</span>
+<span class="cm"># Shows publisher AND subscriber QoS profiles + compatibility</span></pre>
+      </div>
+
+      <div class="section">
+        <div class="section-label">DDS Discovery</div>
+        <p>ROS2 uses DDS (Data Distribution Service) underneath. When a node starts, it broadcasts its existence over multicast UDP. Other nodes discover it and establish peer-to-peer connections — no central broker needed (unlike ROS1's rosmaster).</p>
+        <div class="callout callout-tip">
+          <strong>ROS_DOMAIN_ID</strong>
+          Nodes only discover each other within the same domain ID (0–232). Set the same ID on all machines in a network, different IDs to isolate robot instances. Default = 0.
+        </div>
+      </div>
+
+    </div></div>
+  </div>
+
+  <!-- 17. KALMAN -->
+  <div class="topic" id="kalman">
+    <div class="topic-header" onclick="toggle(this)">
+      <div class="topic-title-row">
+        <div class="topic-num">ROS · 08</div>
+        <div class="topic-title">Kalman Filter for Sensor Fusion <span class="tag-study">to study</span></div>
+        <div class="topic-subtitle">5 equations, predict-update cycle, Q and R matrices</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="topic-body"><div class="topic-body-inner">
+
+      <div class="section">
+        <div class="section-label">The Core Idea</div>
+        <p>A Kalman filter maintains a <strong>state estimate</strong> (e.g., position and velocity) and its <strong>uncertainty</strong>. Every step it does two things: (1) predict where the robot is now based on motion model, (2) correct using a noisy sensor measurement — weighted by how much it trusts each.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-label">The 5 Equations</div>
+        <div class="formula">— PREDICT phase —
+x̂_k|k-1 = F × x̂_k-1|k-1 + B × u_k       (predicted state)
+P_k|k-1  = F × P_k-1|k-1 × F^T + Q        (predicted covariance)
+
+— UPDATE phase —
+K_k = P_k|k-1 × H^T × (H × P_k|k-1 × H^T + R)^-1    (Kalman gain)
+x̂_k|k = x̂_k|k-1 + K_k × (z_k - H × x̂_k|k-1)       (corrected state)
+P_k|k  = (I - K_k × H) × P_k|k-1                     (corrected covariance)
+
+F = state transition (how state evolves without input)
+H = measurement model (maps state to what sensor sees)
+Q = process noise covariance (how much we distrust our motion model)
+R = measurement noise covariance (how noisy the sensor is)
+K = Kalman gain (how much to trust measurement vs prediction)</formula>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Physical meaning of Q and R</div>
+        <table>
+          <tr><th>Matrix</th><th>Large value means</th><th>Effect on filter</th></tr>
+          <tr><td><strong>Q (process noise)</strong></td><td>Motion model is unreliable (wheel slip, wind)</td><td>Filter trusts sensor more, reacts faster to measurements</td></tr>
+          <tr><td><strong>R (measurement noise)</strong></td><td>Sensor is noisy (bad GPS, vibrating IMU)</td><td>Filter trusts prediction more, ignores sensor spikes</td></tr>
+        </table>
+        <div class="callout callout-why">
+          <strong>Intuition</strong>
+          Kalman gain K = P/(P+R). If R is tiny (perfect sensor), K≈1 — fully trust the measurement. If R is huge (terrible sensor), K≈0 — ignore the measurement, stick with prediction. The filter automatically balances these every step.
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Odometry + IMU fusion example</div>
+        <pre><span class="cm"># State: [x, y, theta, vx, vy, omega] (position + velocity)</span>
+<span class="cm"># Prediction: use wheel odometry (motion model)</span>
+<span class="cm"># Update: correct with IMU angular velocity and/or GPS</span>
+
+<span class="kw">from</span> filterpy.kalman <span class="kw">import</span> KalmanFilter
+kf = <span class="fn">KalmanFilter</span>(dim_x=<span class="nm">6</span>, dim_z=<span class="nm">3</span>)  <span class="cm"># 6 states, 3 measurements</span>
+kf.F = motion_model_matrix   <span class="cm"># how state evolves in dt</span>
+kf.H = observation_matrix    <span class="cm"># maps state to sensor readings</span>
+kf.Q = np.<span class="fn">eye</span>(<span class="nm">6</span>) * <span class="nm">0.01</span>      <span class="cm"># trust our odometry model well</span>
+kf.R = np.<span class="fn">eye</span>(<span class="nm">3</span>) * <span class="nm">0.5</span>       <span class="cm"># sensor is moderately noisy</span>
+
+<span class="kw">for</span> measurement <span class="kw">in</span> sensor_stream:
+    kf.<span class="fn">predict</span>()
+    kf.<span class="fn">update</span>(measurement)
+    best_estimate = kf.x</pre>
+        <div class="callout callout-tip">
+          <strong>Extended Kalman Filter (EKF)</strong>
+          When the motion model is nonlinear (e.g., robot turns, so x_new = x + v·cos(θ)·dt — nonlinear in θ), the standard KF doesn't work. EKF linearizes the model at the current state using the Jacobian matrix. robot_localization in ROS2 implements a full EKF for fusing GPS, IMU, and odometry.
+        </div>
+      </div>
+
+    </div></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       MATH FOUNDATIONS
+  ══════════════════════════════════════════ -->
+  <div class="domain-header">
+    <div class="domain-line"></div>
+    <span class="domain-label dl-math">Math Foundations</span>
+    <div class="domain-line"></div>
+  </div>
+
+  <!-- 18. CONVOLUTION -->
+  <div class="topic" id="convolution">
+    <div class="topic-header" onclick="toggle(this)">
+      <div class="topic-title-row">
+        <div class="topic-num">MATH · 01</div>
+        <div class="topic-title">Convolution & Kernel Mathematics</div>
+        <div class="topic-subtitle">2D formula, correlation vs convolution, separability speedup</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="topic-body"><div class="topic-body-inner">
+
+      <div class="section">
+        <div class="section-label">2D Discrete Convolution</div>
+        <div class="formula">Output[r,c] = Σ_i Σ_j  Image[r-i, c-j] × Kernel[i,j]
+
+The kernel is FLIPPED (180° rotation) before sliding.
+Correlation (what OpenCV actually does):
+Output[r,c] = Σ_i Σ_j  Image[r+i, c+j] × Kernel[i,j]  (no flip)</div>
+        <div class="callout callout-why">
+          <strong>Correlation vs Convolution — practical difference</strong>
+          For symmetric kernels (Gaussian, box filter), they're identical — flipping a symmetric kernel does nothing. For asymmetric kernels (Sobel), they're different. OpenCV's filter2D does correlation. For true convolution, flip the kernel first: kernel_flipped = np.flip(kernel).
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Separable Kernels — the performance win</div>
+        <p>A kernel K is separable if it can be written as an outer product of two 1D vectors: K = v × h^T. Gaussian kernels are separable.</p>
+        <div class="formula">5×5 Gaussian on M×M image:
+  Normal:     M² × 25 multiplications
+  Separable:  M² × 5  (horizontal pass)  +  M² × 5  (vertical pass)
+            = M² × 10 multiplications   → 2.5× faster
+
+N×N kernel: normal = M²N², separable = M²×2N   → N/2 speedup factor</div>
+        <pre><span class="cm"># OpenCV automatically uses separability for GaussianBlur</span>
+cv2.<span class="fn">GaussianBlur</span>(img, (<span class="nm">5</span>,<span class="nm">5</span>), sigmaX=<span class="nm">1.5</span>)
+<span class="cm"># Equivalent manually:</span>
+h = cv2.<span class="fn">getGaussianKernel</span>(<span class="nm">5</span>, <span class="nm">1.5</span>)     <span class="cm"># 1D vertical kernel</span>
+img_h = cv2.<span class="fn">filter2D</span>(img, -<span class="nm">1</span>, h)       <span class="cm"># horizontal pass</span>
+img_v = cv2.<span class="fn">filter2D</span>(img_h, -<span class="nm">1</span>, h.T)  <span class="cm"># vertical pass</span></pre>
+      </div>
+
+    </div></div>
+  </div>
+
+  <!-- 19. HOMOGENEOUS COORDS -->
+  <div class="topic" id="homogeneous">
+    <div class="topic-header" onclick="toggle(this)">
+      <div class="topic-title-row">
+        <div class="topic-num">MATH · 02</div>
+        <div class="topic-title">Homogeneous Coordinates</div>
+        <div class="topic-subtitle">Why add a 1, translation as matrix multiply, points at infinity</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="topic-body"><div class="topic-body-inner">
+
+      <div class="section">
+        <div class="section-label">The Problem with Regular Coordinates</div>
+        <p>Rotation and scale are linear operations — representable as matrix multiplication. But <strong>translation is not linear</strong>: [x+tx, y+ty] ≠ matrix × [x, y] for any 2×2 matrix. You can't chain rotation and translation into a single matrix multiply in 2D.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-label">The Fix — add a 1</div>
+        <p>In homogeneous coordinates, a 2D point (x, y) becomes (x, y, 1). Now translation becomes linear:</p>
+        <div class="formula">Translation by (tx, ty):
+[1  0  tx]   [x]   [x + tx]
+[0  1  ty] × [y] = [y + ty]
+[0  0   1]   [1]   [   1  ]
+
+Combined rotation + translation in ONE matrix:
+[cos θ  -sin θ  tx]   [x]
+[sin θ   cos θ  ty] × [y]
+[  0       0     1]   [1]</div>
+        <div class="callout callout-why">
+          <strong>Why this matters for computer vision</strong>
+          All camera projection models, homographies, and robot transforms are expressed as matrix multiplications in homogeneous coordinates. This lets you chain any number of transforms (rotation × translation × scale) as a single matrix product, and then apply it to points efficiently.
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Converting back + what w=0 means</div>
+        <p>A homogeneous point (X, Y, W) converts back to 2D as (X/W, Y/W). If W=0, the point is "at infinity" — it represents a direction, not a location. Parallel lines meet at a point at infinity (w=0) — this is where perspective transformation maps vanishing points.</p>
+        <div class="formula">Normal point:  (6, 4, 2)  →  (6/2, 4/2) = (3, 2)
+Scaled:        (3, 2, 1)  →  (3/1, 2/1) = (3, 2)   same point!
+At infinity:   (1, 0, 0)  →  no finite 2D location → vanishing point</div>
+      </div>
+
+    </div></div>
+  </div>
+
+  <!-- 20. TENSORS -->
+  <div class="topic" id="tensors">
+    <div class="topic-header" onclick="toggle(this)">
+      <div class="topic-title-row">
+        <div class="topic-num">MATH · 03</div>
+        <div class="topic-title">Images as Tensors — NumPy Memory Layout</div>
+        <div class="topic-subtitle">BGR vs RGB, strides, ROI without copy, view hazards</div>
+      </div>
+      <span class="chevron">⌄</span>
+    </div>
+    <div class="topic-body"><div class="topic-body-inner">
+
+      <div class="section">
+        <div class="section-label">Image shape and channel order</div>
+        <div class="diagram">
+OpenCV image shape: (H, W, C) — Height first, Width second, Channels last
+
+grayscale: shape = (480, 640)      dtype = uint8
+color BGR: shape = (480, 640, 3)   dtype = uint8
+           channels: [:,:,0]=Blue, [:,:,1]=Green, [:,:,2]=Red
+
+Memory layout (row-major):
+  pixel(0,0) = [B00, G00, R00],  pixel(0,1) = [B01, G01, R01], ...
+
+<span class="hl2">Most deep learning models expect RGB not BGR!</span>
+<span class="hl">Fix: rgb = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)   (copies)</span>
+<span class="hl">Fast: rgb = bgr[:, :, ::-1]                       (view, no copy!)</span></div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">NumPy Strides — why slicing is free</div>
+        <p>NumPy arrays store data in a flat memory block. Strides tell NumPy how many bytes to skip to move one step in each dimension.</p>
+        <div class="formula">Image (480, 640, 3) dtype=uint8:
+  strides = (640×3, 3, 1) = (1920, 3, 1) bytes
+
+To access pixel [r, c, ch]:
+  memory_offset = r×1920 + c×3 + ch×1</div>
+        <p>When you slice <code>roi = img[100:200, 150:300]</code>, NumPy <strong>does not copy data</strong>. It returns a view with the same strides but a different starting pointer. This is O(1) — instant.</p>
+        <div class="callout callout-trap">
+          <strong>The View Hazard — silent mutation</strong>
+          If you modify a slice, you modify the original image! Also, many OpenCV functions don't accept non-contiguous arrays (slices are non-contiguous in 2D). Fix:
+          <br><code>roi = img[100:200, 150:300].copy()    # now independent</code>
+          <br>Or check: <code>if not img.flags['C_CONTIGUOUS']: img = np.ascontiguousarray(img)</code>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">HxWxC vs CxHxW — framework differences</div>
+        <table>
+          <tr><th>Framework</th><th>Format</th><th>Conversion</th></tr>
+          <tr><td>OpenCV</td><td>H×W×C (BGR)</td><td>—</td></tr>
+          <tr><td>PyTorch</td><td>C×H×W (RGB)</td><td><code>tensor = torch.from_numpy(img[:,:,::-1].transpose(2,0,1))</code></td></tr>
+          <tr><td>TensorFlow/Keras</td><td>H×W×C (RGB)</td><td><code>img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)</code></td></tr>
+          <tr><td>ONNX/DNN blob</td><td>N×C×H×W (RGB)</td><td><code>cv2.dnn.blobFromImage(img, scalefactor=1/255, swapRB=True)</code></td></tr>
+        </table>
+      </div>
+
+    </div></div>
+  </div>
+
+</main>
+
+<script>
+  function toggle(header) {
+    const topic = header.parentElement;
+    topic.classList.toggle('open');
+  }
+
+  let allOpen = false;
+  function toggleAll() {
+    allOpen = !allOpen;
+    document.querySelectorAll('.topic').forEach(t => {
+      t.classList.toggle('open', allOpen);
+    });
+  }
+
+  // Active nav link on scroll
+  const sections = document.querySelectorAll('.topic');
+  const navLinks = document.querySelectorAll('#nav a');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`#nav a[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -75% 0px' });
+  sections.forEach(s => observer.observe(s));
+
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const doc = document.documentElement;
+    const progress = doc.scrollTop / (doc.scrollHeight - doc.clientHeight);
+    document.getElementById('progress-bar').style.transform = `scaleX(${progress})`;
+  });
+
+  // Search
+  const searchInput = document.getElementById('search');
+  searchInput.addEventListener('input', () => {
+    const q = searchInput.value.toLowerCase();
+    document.querySelectorAll('.topic').forEach(topic => {
+      const text = topic.innerText.toLowerCase();
+      topic.style.display = text.includes(q) ? '' : 'none';
+    });
+    document.querySelectorAll('#nav a').forEach(link => {
+      const id = link.getAttribute('href').slice(1);
+      const el = document.getElementById(id);
+      if (el) link.style.opacity = el.style.display === 'none' ? '0.3' : '1';
+    });
+  });
+</script>
+</body>
+</html>
